@@ -67,7 +67,7 @@ class TestMapperTestCase(unittest.TestCase):
 
     def testKeys(self):
         self.assertEqual(set(self.mapper.keys()),
-                set(['filter', 'patch', 'skyTile', 'tract', 'visit']))
+                set(['filter', 'patch', 'skyTile', 'tract', 'visit', 'pixel_id']))
 
     def testGetDatasetTypes(self):
         someKeys = set(['raw', 'processCcd_config', 'processCcd_metadata'])
