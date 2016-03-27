@@ -1,9 +1,9 @@
 #!/usr/bin/env python2
 from __future__ import absolute_import, division, print_function
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010, 2011, 2012, 2013 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,14 +11,14 @@ from __future__ import absolute_import, division, print_function
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 import argparse
@@ -34,6 +34,7 @@ import lsst.afw.image as afwImage
 import lsst.skypix as skypix
 
 DefaultOutputRegistry = "registry.sqlite3"
+
 
 def process(dirList, inputRegistry=None, outputRegistry="registry.sqlite3"):
     print("process(dirList=%s)" % (dirList,))
@@ -86,6 +87,7 @@ def process(dirList, inputRegistry=None, outputRegistry="registry.sqlite3"):
         conn.close()
     print("wrote registry file %r" % (outputRegistry,))
 
+
 def processRawDir(rawDir, conn, done, qsp):
     print(rawDir, "... started")
     nProcessed = 0
@@ -108,36 +110,36 @@ def processRawDir(rawDir, conn, done, qsp):
         expTime = md.get("EXPTIME")
         mjdObs = md.get("MJD-OBS")
         taiObs = dafBase.DateTime(mjdObs, dafBase.DateTime.MJD,
-                dafBase.DateTime.TAI).toString()[:-1]
+                                  dafBase.DateTime.TAI).toString()[:-1]
         conn.execute("""INSERT INTO raw VALUES
             (NULL, ?, ?, ?, ?)""",
-            (visit, filterName, taiObs, expTime))
-   
+                     (visit, filterName, taiObs, expTime))
+
         for row in conn.execute("SELECT last_insert_rowid()"):
             id = row[0]
             break
 
         wcs = afwImage.makeWcs(md)
         poly = skypix.imageToPolygon(wcs,
-                md.get("NAXIS1"), md.get("NAXIS2"),
-                padRad=0.000075) # about 15 arcsec
+                                     md.get("NAXIS1"), md.get("NAXIS2"),
+                                     padRad=0.000075)  # about 15 arcsec
         pix = qsp.intersect(poly)
         for skyTileId in pix:
             conn.execute("INSERT INTO raw_skyTile VALUES(?, ?)",
-                    (id, skyTileId))
+                         (id, skyTileId))
 
         conn.commit()
 
         nProcessed += 1
 
     print("%s... %d processed, %d skipped, %d unrecognized" %
-            (rawDir, nProcessed, nSkipped, nUnrecognized))
+          (rawDir, nProcessed, nSkipped, nUnrecognized))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Make a registry file for a data repository")
     parser.add_argument("dir", nargs="+", help="one or more directories of data, e.g. data/input")
     parser.add_argument("-i", "--input", help="input registry")
     parser.add_argument("-o", "--output", default=DefaultOutputRegistry,
-            help="output registry (default=%s)" % (DefaultOutputRegistry,))
+                        help="output registry (default=%s)" % (DefaultOutputRegistry,))
     args = parser.parse_args()
     process(args.dir, args.input, args.output)

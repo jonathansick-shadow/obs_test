@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,14 +11,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
@@ -30,6 +30,7 @@ import lsst.utils.tests as utilsTests
 from lsst.obs.test import TestMapper
 from lsst.daf.persistence import Butler
 import lsst.afw.image as afwImage
+
 
 class TestMapperTestCase(unittest.TestCase):
     """A test case for the test mapper."""
@@ -50,7 +51,7 @@ class TestMapperTestCase(unittest.TestCase):
         self.assertEqual(loc.getCppType(), "Config")
         self.assertEqual(loc.getStorageName(), "ConfigStorage")
         self.assertEqual(loc.getLocations(), [os.path.join(self.output,
-            "config", "processCcd.py")])
+                                                           "config", "processCcd.py")])
         for k, v in dataId.iteritems():
             self.assertEqual(loc.getAdditionalData().get(k), v)
 
@@ -61,13 +62,13 @@ class TestMapperTestCase(unittest.TestCase):
         self.assertEqual(loc.getCppType(), "PropertySet")
         self.assertEqual(loc.getStorageName(), "BoostStorage")
         self.assertEqual(loc.getLocations(), [os.path.join(self.output,
-            "processCcd_metadata", "v1_fg.boost")])
+                                                           "processCcd_metadata", "v1_fg.boost")])
         for k, v in dataId.iteritems():
             self.assertEqual(loc.getAdditionalData().get(k), v)
 
     def testKeys(self):
         self.assertEqual(set(self.mapper.keys()),
-                set(['filter', 'patch', 'skyTile', 'tract', 'visit']))
+                         set(['filter', 'patch', 'skyTile', 'tract', 'visit']))
 
     def testGetDatasetTypes(self):
         someKeys = set(['raw', 'processCcd_config', 'processCcd_metadata'])
@@ -75,9 +76,9 @@ class TestMapperTestCase(unittest.TestCase):
 
     def testGetKeys(self):
         self.assertEqual(set(self.mapper.getKeys("raw", "skyTile")),
-                set(["filter"]))
+                         set(["filter"]))
         self.assertEqual(set(self.mapper.getKeys("raw", "visit")),
-                set(["filter", "visit"]))
+                         set(["filter", "visit"]))
 
     def testGetDefaultLevel(self):
         self.assertEqual(self.mapper.getDefaultLevel(), "visit")
@@ -139,7 +140,7 @@ class TestMapperTestCase(unittest.TestCase):
 
     def testExposureIdInfo(self):
         butler = Butler(self.input)
-        expIdBits = self.mapper.bypass_ccdExposureId_bits( # args are ignored
+        expIdBits = self.mapper.bypass_ccdExposureId_bits(  # args are ignored
             datasetType = None,
             pythonType = int,
             location = None,
@@ -160,7 +161,7 @@ class TestMapperTestCase(unittest.TestCase):
         ]:
             self.assertEqual(self.mapper.validate(dataId), dataId)
         for dataId in [
-            dict(visit="not-an-int"), # visit must be an integer
+            dict(visit="not-an-int"),  # visit must be an integer
         ]:
             self.assertRaises(Exception, self.mapper.validate, dataId)
 
@@ -172,6 +173,7 @@ def suite():
     suites += unittest.makeSuite(TestMapperTestCase)
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     utilsTests.run(suite(), shouldExit)

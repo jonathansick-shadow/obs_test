@@ -66,7 +66,7 @@ class PolicyTestCase(unittest.TestCase):
                     pexVal = pexPolicy.get(name)
                 self.assertEqual(pexVal, policy.get(name))
 
-        #verify a known value, just for sanity:
+        # verify a known value, just for sanity:
         self.assertEqual(policy.get('exposures.raw.template'), 'raw/raw_v%(visit)d_f%(filter)s.fits.gz')
 
     def testGetStringArray(self):
@@ -116,6 +116,7 @@ def suite():
     suites += unittest.makeSuite(PolicyTestCase)
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit = False):
     utilsTests.run(suite(), shouldExit)

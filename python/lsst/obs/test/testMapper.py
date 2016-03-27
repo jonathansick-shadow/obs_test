@@ -1,7 +1,7 @@
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -9,14 +9,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
@@ -29,6 +29,7 @@ import lsst.pex.policy as pexPolicy
 from .testCamera import TestCamera
 
 __all__ = ["TestMapper"]
+
 
 class TestMapper(CameraMapper):
     packageName = 'obs_test'
@@ -47,7 +48,7 @@ class TestMapper(CameraMapper):
 
         CameraMapper.__init__(self, policy, policyFile.getRepositoryPath(), **kwargs)
         self.filterIdMap = {
-                'u': 0, 'g': 1, 'r': 2, 'i': 3, 'z': 4, 'y': 5, 'i2': 5}
+            'u': 0, 'g': 1, 'r': 2, 'i': 3, 'z': 4, 'y': 5, 'i2': 5}
 
         # The LSST Filters from L. Jones 04/07/10
         afwImageUtils.defineFilter('u', 364.59)
@@ -55,7 +56,7 @@ class TestMapper(CameraMapper):
         afwImageUtils.defineFilter('r', 619.42)
         afwImageUtils.defineFilter('i', 752.06)
         afwImageUtils.defineFilter('z', 866.85)
-        afwImageUtils.defineFilter('y', 971.68, alias=['y4']) # official y filter
+        afwImageUtils.defineFilter('y', 971.68, alias=['y4'])  # official y filter
 
     def _extractDetectorName(self, dataId):
         return "0"
